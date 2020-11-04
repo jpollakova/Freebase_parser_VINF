@@ -7,7 +7,8 @@ import re
 rx_dict = {
     'artist_id':re.compile('\/(?P<subject>[gm]\..+)>.+<.+>.+\/music\.artist *>'),
     'award_id':re.compile('\/(?P<subject>[gm]\..+)>.+\/award\.award_winner\.awards_won *>.+\/(?P<object>[gm]\..+)>'),
-    'track':re.compile('\/(?P<subject>[gm]\..+)>.+\/music\.artist\.track *>.+\/(?P<object>[gm]\..+)>')
+    'track':re.compile('\/(?P<subject>[gm]\..+)>.+\/music\.artist\.track *>.+\/(?P<object>[gm]\..+)>'),
+    'name':re.compile('\/(?P<subject>[gm]\..+)>.+((\/type\.object\.name)|(label)) *>.+\"(?P<object>.+)\".*@(?P<lang>[a-zA-Z]{1,})')
 
 }
 
@@ -17,7 +18,10 @@ def fileSwitcher(key):
     switcher = {
         'artist_id': 'artist_id.txt',
         'award_id': 'awards.txt',
-        'track': 'tracks.txt'
+        'track': 'tracks.txt',
+        'name_en': 'artists_names_EN.txt',
+        'name_es': 'artists_names_ES.txt',
+        'name_sk': 'artists_names_SK.txt'
     }
     return switcher.get(key, 'Invalid key!')
 
@@ -28,30 +32,57 @@ def fileSwitcher(key):
 def parse_line(line):
 
     delimiter = ','
+    #last_name, FBsubject , FBobject = '' ,'', ''
+    
 
     for key, rx in rx_dict.items():
         match = rx.search(line)
-        if match:
-            #if key == 'track':
-             #   print(line)
+        if match:            
+            
+            if key == 'name':                
+                if match.group('lang')!='en' and match.group('lang')!='es' and match.group('lang')!='sk':
+                    continue                
+                #if last_name == str(match.group('object')):
+                    #continue                    
+                key = key + '_' + match.group('lang')
 
-            FBsubject = match.group('subject')
-
-            print(' subject: ', FBsubject )                        
-
-            f = open(fileSwitcher(key),'a')
-            f.write(FBsubject)
+            #    if last_music_artist_id =='':                    
+            #        continue
+            #    if FBsubject != last_music_artist_id or isArtist(FBsubject)==False:        
+            #        continue
+            
+            FBsubject = match.group('subject')            
+            
+            f = open(fileSwitcher(key),'ab')
+            f.write(FBsubject.encode('utf-8'))
 
             if key != 'artist_id':                
                 FBobject = match.group('object')
-                f.write(delimiter + FBobject)
-                print(' object: ', FBobject )  
+                f.write((delimiter + FBobject).encode('utf-8'))
 
-            f.write('\n')
+            if key.startswith('name'):
+                #last_name = FBobject
+                f.write((delimiter + match.group('lang')).encode('utf-8'))
+
+            if key == 'artist_id': 
+               last_music_artist_id = FBsubject
+            
+            f.write('\n'.encode('utf-8'))
             f.close
-
 
             return key, match
     
     return None, None
-    
+
+
+def isArtist(id_name):
+    f = open('artist_id.txt','r')
+
+    for line in f: 
+        if line == id_name:
+            f.close()
+            return True 
+    f.close()
+    return False
+
+
