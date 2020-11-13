@@ -1,4 +1,6 @@
 import re
+import gzip
+import os.path
 
 
 # Regex dictionary - there are regexes for parsing data related to artist and their awards. Each regular expression
@@ -28,30 +30,36 @@ def fileSwitcher(key):
 
 # The function for parsing data and writing data to textfiles. The function gets the line and determines if there is 
 # any match with our declared regexes. If so, the data are stored in the particular textfile. 
+ 
+last_name, last_music_artist_id = '', ''
+delimiter = ','
 
 def parse_line(line):
 
-    delimiter = ','
-    #last_name, FBsubject , FBobject = '' ,'', ''
-    
+    FBsubject , FBobject = '',''  
 
     for key, rx in rx_dict.items():
         match = rx.search(line)
-        if match:            
-            
-            if key == 'name':                
+        if match:
+                       
+            FBsubject = match.group('subject') 
+
+            if key == 'name':
+                global last_name, last_music_artist_id
+
                 if match.group('lang')!='en' and match.group('lang')!='es' and match.group('lang')!='sk':
                     continue                
-                #if last_name == str(match.group('object')):
-                    #continue                    
-                key = key + '_' + match.group('lang')
+                if last_name == str(match.group('object')):
+                    continue 
+                if last_music_artist_id =='':                    
+                    continue
+                #if (isArtist(FBsubject))==False:        
+                #    continue
+                if (last_music_artist_id == FBsubject):
+                    print('muhahaaaaaaaaaa', match.group('object'))
 
-            #    if last_music_artist_id =='':                    
-            #        continue
-            #    if FBsubject != last_music_artist_id or isArtist(FBsubject)==False:        
-            #        continue
-            
-            FBsubject = match.group('subject')            
+                key = key + '_' + match.group('lang')
+                       
             
             f = open(fileSwitcher(key),'ab')
             f.write(FBsubject.encode('utf-8'))
@@ -61,7 +69,7 @@ def parse_line(line):
                 f.write((delimiter + FBobject).encode('utf-8'))
 
             if key.startswith('name'):
-                #last_name = FBobject
+                last_name = FBobject
                 f.write((delimiter + match.group('lang')).encode('utf-8'))
 
             if key == 'artist_id': 
@@ -69,6 +77,10 @@ def parse_line(line):
             
             f.write('\n'.encode('utf-8'))
             f.close
+            
+            #if (FBsubject == 'm.011ncp6d') or (FBobject == 'Michael Jackson'):
+            #if (line.__contains__('m.011ncp6d')):
+            #    print(line)
 
             return key, match
     
@@ -76,13 +88,41 @@ def parse_line(line):
 
 
 def isArtist(id_name):
-    f = open('artist_id.txt','r')
+    myfile='artist_id.txt'
+    #if ( os.path.exists(myfile) == False):
+    #    print('fuck')
+    #    return False   
 
-    for line in f: 
-        if line == id_name:
-            f.close()
+    try:
+        ids = open(myfile,'r')
+    except FileNotFoundError:
+        # doesn't exist
+        print('doesnt exist')
+        return False
+    
+    for id in ids: 
+        #print('1.',id,'2.', id_name)
+        if id == id_name:
+            ids.close()
+            print('success')
             return True 
-    f.close()
-    return False
+        ids.close()
+        return False
 
 
+
+with gzip.open('C:/Users/janep/Desktop/Škola/ING/1.ročník/1.semester/VINF/freebase-rdf-latest.gz','rt',encoding="utf-8") as f:
+    x = 0
+    last_name, last_music_artist_id = '', ''
+    for line in f:
+        x = x + 1
+        #if (line.__contains__('music.artist')):
+        #    print(line)
+        key, match = parse_line(line)
+        
+        #if match != None:
+            #print(x)
+            #print(x , 'key: ', key, ' match: ', match)
+
+        if x == 10000000 :
+            break
