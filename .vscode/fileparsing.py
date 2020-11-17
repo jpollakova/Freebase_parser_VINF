@@ -50,7 +50,8 @@ def headerSwitcher(key):
 # any match with our declared regexes. If so, the data are stored in the particular textfile. 
  
 #last_name_es, last_name_sk, last_name_en,
-last_music_artist_id, last_name = '', ''
+#last_music_artist_id,
+last_name = '', ''
 
 delimiter = ','
 
