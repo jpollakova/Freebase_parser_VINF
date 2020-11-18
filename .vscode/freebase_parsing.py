@@ -69,6 +69,7 @@ with gzip.open('C:/Users/janep/Desktop/Škola/ING/1.ročník/1.semester/VINF/fre
 
                 if key == 'artist_id':
                     f_artist_id.write(FBsubject + '\n')
+                    break
                 
                 if key == 'name':
                     if lang!='en' and lang!='es' and lang!='sk':
@@ -78,16 +79,20 @@ with gzip.open('C:/Users/janep/Desktop/Škola/ING/1.ročník/1.semester/VINF/fre
                     key = 'all_names'
                     f_all_names.write(FBsubject + delimiter + FBobject + delimiter + lang + '\n')
                     last_name = FBobject
+                    break
                 
 
                 if key == 'award_id':
                     f_award_id.write(FBsubject + delimiter + FBobject + '\n')
+                    break
 
                 if key == 'award_honor_id':
                     f_award_honor_id.write(FBsubject + delimiter + FBobject + '\n')
+                    break
 
                 if key == 'award_honor_winner':
                     f_award_honor_winner.write(FBsubject + delimiter + FBobject + '\n')
+                    break
 
         
 
