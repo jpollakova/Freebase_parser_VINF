@@ -40,8 +40,6 @@ for key, values in artist_name.items():
     x = x+1
     if x % 10000 == 0:
         print(x)
-    if x == 10000:
-        break
 
     for name in values:
 
@@ -83,8 +81,7 @@ for key, values in artist_name.items():
                 string_cleared_award_names = string_cleared_award_names + ';' + clear_name
 
         #print(name)
-        #print(string_cleared_award_names)
-        
+        #print(string_cleared_award_names)        
 
         #Melissa Joan Hart,en
         #Young Artist Award Best Performance in a Feature Film - Leading Young Actress,en;Young Artist Award Best Performance in a Feature Film - Leading Young Actress,en

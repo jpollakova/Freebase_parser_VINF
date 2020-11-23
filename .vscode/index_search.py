@@ -9,12 +9,12 @@ from lexicon import Lexicon
 
 ix = open_dir("indexdir")
 
-searched_term = 'Young Artist Award Best Performance in a Feature Film'
-#searched_term = searched_term.encode()
+#searched_term = 'Billboard Music Award for Modern Rock'
+searched_term = 'Green Day'
 #print(searched_term)
 
 with ix.searcher() as searcher:
-    query = QueryParser('award_list', schema = ix.schema).parse(searched_term)
+    query = QueryParser('name', schema = ix.schema).parse(searched_term)
     results = searcher.search(query)
 
     if len(results) != 0:
@@ -22,7 +22,7 @@ with ix.searcher() as searcher:
         for i in results:     
             print(i)
     else:
-        print('Sooooorrryyyy')
+        print('Sorry, but the searched term does not occur in the index')
 
     print(ix.schema)
     #print(list(searcher.lexicon('name')))

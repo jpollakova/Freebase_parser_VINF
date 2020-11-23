@@ -98,7 +98,7 @@ for key, value in artist_name.items() :
 '''
 print('\n________________________________________________________\n')
 
-term_searched = 'Anne Murray,es'
+term_searched = 'Green Day,sk'
 print('SEARCHED TERM - ARTIST: ' + term_searched)
 id = get_id_artist(term_searched)
 
