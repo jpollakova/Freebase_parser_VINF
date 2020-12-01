@@ -7,23 +7,14 @@ with gzip.open('C:/Users/janep/Desktop/Škola/ING/1.ročník/1.semester/VINF/fre
     
     x = 0
     last_name = ''
-    #skusobny = open('skusobny.txt', 'w', encoding="utf-8")
 
     #subory
-    f_artist_id = open('artist_id.txt', 'w', encoding="utf-8")
-    #f_artist_id.write(headerSwitcher('artist_id'))
-
-    f_all_names = open('all_names.txt', 'w', encoding="utf-8")
-    #f_all_names.write(headerSwitcher('all_names'))
-
-    f_award_id = open('award_id.txt', 'w', encoding="utf-8")
-    #f_award_id.write(headerSwitcher('award_id'))
-
-    f_award_honor_id = open('award_honor_ids.txt', 'w', encoding="utf-8")
-    #f_award_honor_id.write(headerSwitcher('award_honor_id'))
-
-    f_award_honor_winner = open('award_honor_winner_id.txt', 'w', encoding="utf-8")
-    #f_award_honor_winner.write(headerSwitcher('award_honor_winner'))
+    f_artist_id = open('PARSED_DATA/artist_id.txt', 'w', encoding="utf-8")
+    f_all_names = open('PARSED_DATA/all_names.txt', 'w', encoding="utf-8")
+    f_award_id = open('PARSED_DATA/award_id.txt', 'w', encoding="utf-8")
+    f_award_honor_id = open('PARSED_DATA/award_honor_ids.txt', 'w', encoding="utf-8")
+    f_award_honor_winner = open('PARSED_DATA/award_honor_winner_id.txt', 'w', encoding="utf-8")
+    f_track_id = open('PARSED_DATA/track_id.txt', 'w', encoding="utf-8")
 
     #prechod freebasom
     for l in f:
@@ -79,12 +70,22 @@ with gzip.open('C:/Users/janep/Desktop/Škola/ING/1.ročník/1.semester/VINF/fre
                 line = line[-20: -1]
                 f_award_honor_winner.write(line[re.search('/ns/[m|g]\.', line).span()[0] + 4:re.search('>', line).span()[0]] + '\n')
             continue
-        
 
-        if x == 1000000000 :
-            break
+        #new
+        match = re.search('/music\.artist\.track *>',line)
+        if match:
+            y = re.search('/ns/[m|g]\.', line)
+            if y:
+                f_track_id.write(line[y.span()[0] + 4:re.search('>', line).span()[0]] + ',')
+                line = line[-20: -1]
+                f_track_id.write(line[re.search('/ns/[m|g]\.', line).span()[0] + 4:re.search('>', line).span()[0]] + '\n')
+
+            continue
+        #new
+
         if x % 10000000 == 0:
             print(x)
+
 
 f.close()
 f_all_names.close()
@@ -92,3 +93,4 @@ f_award_honor_id.close()
 f_artist_id.close()
 f_award_honor_winner.close()
 f_award_id.close()
+f_track_id.close()

@@ -98,5 +98,5 @@ for key, values in artist_name.items():
         writer.add_document(name = name, award_list = string_cleared_award_names)
 
 
-writer.add_document(name = 'aha', award_list = 'b;c;d')
+#writer.add_document(name = 'aha', award_list = 'b;c;d')
 writer.commit()
