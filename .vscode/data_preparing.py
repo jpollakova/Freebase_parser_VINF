@@ -3,6 +3,7 @@ from itertools import islice
 import pickle
 import json
 
+
 def create_artist_dict():
     f = open('PARSED_DATA/artist_id.txt', 'rt', encoding="utf-8")
 
@@ -71,6 +72,26 @@ def create_awards_dicts():
     f.close()
     return (award_id_dict,award_honor_id_dict)
 
+def create_artist_wikipage():
+    wikipage_dict = {}
+
+    f = open('PARSED_DATA/wikipage_mappings.txt', 'rt', encoding="utf-8")
+
+    for line in f:
+        line = line.strip('\n')
+        id_artist = line[:re.search(',',line).span()[0]]
+        wikipage_link = line[re.search(',',line).span()[1]:]
+
+        if id_artist not in artist_dict:
+            continue
+
+        if id_artist not in wikipage_dict:
+            wikipage_dict[id_artist] = []
+
+        wikipage_dict[id_artist].append(wikipage_link)
+    
+    return wikipage_dict
+
 
 def save_dict_to_pickle(dict, file_name):
     f = open(file_name + ".pkl","wb")
@@ -83,15 +104,8 @@ artist_dict = create_artist_dict()
 artist_awards_dict = create_artist_awards_dict()
 award_id_dict , award_honor_id_dict= create_awards_dicts()
 artist_tracks_dict, track_dict = create_artist_tracks_dict()
+artist_wikipage_dict = create_artist_wikipage()
 
-'''
-x=0
-for key, value in artist_awards_dict.items() :
-    x = x+1
-    print (key, value)
-    if x == 100:
-        break
-'''
 
 f_all_names = open('PARSED_DATA/all_names.txt', 'rt', encoding="utf-8")
 
@@ -116,72 +130,30 @@ for line in f_all_names:
 f_all_names.close()
 
 
-x=0
-for key, value in track_dict.items() :
-    x = x+1
-    print (key, value)
-    if x == 500:
-        break
-
-
 save_dict_to_pickle(artist_dict,"dict_artist_name")
 save_dict_to_pickle(award_honor_id_dict,"dict_award_honor_name")
 save_dict_to_pickle(artist_awards_dict,"dict_artist_awards")
 
 save_dict_to_pickle(award_id_dict,"dict_award_award_honor")
 save_dict_to_pickle(track_dict,"dict_track_id")
-save_dict_to_pickle(artist_tracks_dict,"dict_artist_track_id.pkl")
+save_dict_to_pickle(artist_tracks_dict,"dict_artist_track_id")
+
+save_dict_to_pickle(artist_wikipage_dict,"dict_artist_wikipage")
 
 '''
-DICT_artist_name = open("dict_artist_name.pkl","wb")
-pickle.dump(artist_dict,DICT_artist_name)
-DICT_artist_name.close()
-
-DICT_award_honor_name = open("dict_award_honor_name.pkl","wb")
-pickle.dump(award_honor_id_dict,DICT_award_honor_name)
-DICT_award_honor_name.close()
-
-DICT_artist_awards = open("dict_artist_awards.pkl","wb")
-pickle.dump(artist_awards_dict,DICT_artist_awards)
-DICT_artist_awards.close()
-
-DICT_award_award_honor = open("dict_award_award_honor.pkl","wb")
-pickle.dump(award_id_dict,DICT_award_award_honor)
-DICT_award_award_honor.close()
-
-DICT_track_id = open("dict_track_id.pkl","wb")
-pickle.dump(track_dict,DICT_track_id)
-DICT_track_id.close()
-
-DICT_artist_track_id = open("dict_artist_track_id.pkl","wb")
-pickle.dump(artist_tracks_dict,DICT_artist_track_id)
-DICT_artist_track_id.close()
+x=0
+for key, value in artist_wikipage_dict.items() :
+    x = x+1
+    print (key, value)
+    if x == 50:
+        break
 '''
+
+
 artist_awards_dict.clear()
 artist_dict.clear()
 artist_tracks_dict.clear()
 award_honor_id_dict.clear()
 award_id_dict.clear()
 track_dict.clear()
-
-
-'''
-#DICT_artist_name = open("dict_artist_name.pkl", "rb")
-#outofpickledict = pickle.load(DICT_artist_name)
-#DICT_artist_name.close()
-
-x=0
-for key, value in outofpickledict.items() :
-    x = x+1
-    print (key, value)
-    if x == 500:
-        break
-
-
-'''
-
-
-# create final dicts 
-# - artist_name - list_of_his_awards
-# - artist_name - list_of_his_tracks
-# - artist_name - wikipage_link
+artist_wikipage_dict.clear()
