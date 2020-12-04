@@ -10,11 +10,12 @@ from lexicon import Lexicon
 ix = open_dir("indexdir")
 
 #searched_term = 'Billboard Music Award for Modern Rock'
-searched_term = 'Green Day'
+#searched_term = 'Kerrang! Award pre najlepšiu medzinárodnú skupinu'
+searched_term = 'b'
 #print(searched_term)
 
 with ix.searcher() as searcher:
-    query = QueryParser('name', schema = ix.schema).parse(searched_term)
+    query = QueryParser('award_list', schema = ix.schema).parse(searched_term)
     results = searcher.search(query)
 
     if len(results) != 0:

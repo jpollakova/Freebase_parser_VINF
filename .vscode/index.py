@@ -29,42 +29,63 @@ DICT_wikipage = open("FINAL_wikipage_dict.pkl", "rb")
 wikipage_links = pickle.load(DICT_wikipage)
 DICT_wikipage.close()
 
-
 x=0
-for key, values in artist_name.items():
-    x = x+1
-    if x % 10000 == 0:
+for key, values in artist_awards.items():
+    x=x+1
+    if x % 1000 == 0:
         print(x)
+    if x == 3000:
+        break
+    
+    awardsString = ' '.join(map(str, values))
+    awardsString = awardsString.replace('] [', '][')
+  
+    #print("AWARDS LIST : ", awardsString) 
 
-    for name in values:
+    list_of_tracks = []
 
-        list_id_awards = []
-        for k, v in artist_awards.items():
-            if k == key :
-                list_id_awards = v
-                break
+    for k,v in artist_tracks.items():
+        if k == key:
+            list_of_tracks = artist_tracks.get(k)
         
-        list_id_award_honor = []
-        for aw in list_id_awards:
-            for k, v in award_award_honor.items():
-                if k == aw:
-                    list_id_award_honor.append(award_award_honor[aw])
+    tracksString = ''.join(map(str, list_of_tracks)) 
+    #print("TRACKS LIST : ", tracksString)
 
-        list_awards_names = []
-        for aw in list_id_award_honor:
-            if aw in award_honor_name:
-                list_awards_names.append(award_honor_name[aw])
+    wikilink_list = wikipage_links.get(key)
+    if wikilink_list == None:
+        #print("\n\n")
+        continue        
+    elif len(wikilink_list) == 1:
+        wikilinkString = wikilink_list[0]
+    else:
+        wikilinkString = ''.join(map(str, wikilink_list))
+
+    #print("WIKILINK : ", wikilinkString)
+
+    #print("\n\n")
+
+    #string_cleared_award_names = string_cleared_award_names.encode()
+
+    #name = key.encode()
+    #awardsString = awardsString.encode()
+    #tracksString = tracksString.encode()
+    #wikilinkString = wikilinkString.encode()
+
+    writer.add_document(name = key, award_list = awardsString, track_list = tracksString, wikilink = wikilinkString )
 
 
-        '''
+writer.add_document(name = 'aha', award_list = 'b;c;d')
+writer.commit()
+
+'''
         if name == 'Melissa Joan Hart,en':
             print("name: " + name)
             clear_award_name = str(list_awards_names[1]).replace('[','').replace(']','')
             clear_award_name = clear_award_name[1:-1]
             print(clear_award_name)
             break
-        '''        
-
+'''        
+'''
         string_cleared_award_names = ''
 
         for aw in list_awards_names:
@@ -74,24 +95,24 @@ for key, values in artist_name.items():
                 string_cleared_award_names = clear_name
             else:
                 string_cleared_award_names = string_cleared_award_names + ';' + clear_name
-
+'''
         #print(name)
         #print(string_cleared_award_names)        
 
         #Melissa Joan Hart,en
         #Young Artist Award Best Performance in a Feature Film - Leading Young Actress,en;Young Artist Award Best Performance in a Feature Film - Leading Young Actress,en
         
-        '''
-        print('name> ' + name)
-        if len(list_cleared_award_names)>1:
-            print(list_cleared_award_names[1])
-        print(list_cleared_award_names)
-        '''     
+        
+        #print('name> ' + name)
+        #if len(list_cleared_award_names)>1:
+        #    print(list_cleared_award_names[1])
+        #print(list_cleared_award_names)
+           
         #name = name.encode()
         #string_cleared_award_names = string_cleared_award_names.encode()
 
-        writer.add_document(name = name, award_list = string_cleared_award_names)
+        #writer.add_document(name = name, award_list = string_cleared_award_names)
 
 
 #writer.add_document(name = 'aha', award_list = 'b;c;d')
-writer.commit()
+#writer.commit()
