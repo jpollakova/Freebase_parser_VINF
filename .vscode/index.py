@@ -10,30 +10,25 @@ if not os.path.exists('indexdir'):
     os.mkdir("indexdir")
 
 #schema = Schema(name = ID(stored=True, unique=True), award_list = IDLIST(stored=True, expression=re.compile(r"[^;]+")))
-schema = Schema(name = TEXT(stored=True), award_list = TEXT(stored=True))
+schema = Schema(name = TEXT(stored=True), award_list = TEXT(stored=True), track_list = TEXT(stored=True), wikilink = TEXT(stored=True))
 
 ix = index.create_in("indexdir", schema)
 writer = ix.writer()
 
 
 #loading dictionaries
-DICT_artist_name = open("dict_artist_name.pkl", "rb")
-artist_name = pickle.load(DICT_artist_name)
-DICT_artist_name.close()
-
-DICT_artist_awards = open("dict_artist_awards.pkl", "rb")
+DICT_artist_awards = open("FINAL_artist_awards_dict.pkl", "rb")
 artist_awards = pickle.load(DICT_artist_awards)
 DICT_artist_awards.close()
 
-DICT_award_award_honor = open("dict_award_award_honor.pkl", "rb")
-award_award_honor = pickle.load(DICT_award_award_honor)
-DICT_award_award_honor.close()
+DICT_artist_tracks = open("FINAL_artist_tracks_dict.pkl", "rb")
+artist_tracks = pickle.load(DICT_artist_tracks)
+DICT_artist_tracks.close()
 
-DICT_award_honor_name = open("dict_award_honor_name.pkl", "rb")
-award_honor_name = pickle.load(DICT_award_honor_name)
-DICT_award_honor_name.close()
+DICT_wikipage = open("FINAL_wikipage_dict.pkl", "rb")
+wikipage_links = pickle.load(DICT_wikipage)
+DICT_wikipage.close()
 
-print(len(artist_name))
 
 x=0
 for key, values in artist_name.items():
