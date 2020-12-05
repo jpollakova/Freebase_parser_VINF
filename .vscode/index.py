@@ -29,28 +29,31 @@ DICT_wikipage = open("FINAL_wikipage_dict.pkl", "rb")
 wikipage_links = pickle.load(DICT_wikipage)
 DICT_wikipage.close()
 
+
+print('LEN - awards > ', len(artist_awards))
+print('LEN - tracks> ', len(artist_tracks))
+print('LEN - wiki> ', len(wikipage_links))
+
 x=0
-for key, values in artist_awards.items():
+for key, values in artist_tracks.items():
     x=x+1
     if x % 1000 == 0:
         print(x)
-    if x == 3000:
-        break
+    #if x == 3000:
+    #    break
     
-    awardsString = ' '.join(map(str, values))
-    awardsString = awardsString.replace('] [', '][')
-  
-    #print("AWARDS LIST : ", awardsString) 
+    tracksString = ' '.join(map(str, values))
+    
+    list_of_awards = []
 
-    list_of_tracks = []
-
-    for k,v in artist_tracks.items():
+    for k,v in artist_awards.items():
         if k == key:
-            list_of_tracks = artist_tracks.get(k)
+            list_of_awards = artist_awards.get(k)
+            continue
         
-    tracksString = ''.join(map(str, list_of_tracks)) 
-    #print("TRACKS LIST : ", tracksString)
-
+    awardsString = ''.join(map(str, list_of_awards))
+    awardsString = awardsString.replace('] [', '][')
+    
     wikilink_list = wikipage_links.get(key)
     if wikilink_list == None:
         #print("\n\n")
@@ -60,23 +63,19 @@ for key, values in artist_awards.items():
     else:
         wikilinkString = ''.join(map(str, wikilink_list))
 
-    #print("WIKILINK : ", wikilinkString)
-
+    #print('AWARDS> ', awardsString)
+    #print('TRACKS> ', tracksString)
+    #print('WIKI> ', wikilinkString)
     #print("\n\n")
 
-    #string_cleared_award_names = string_cleared_award_names.encode()
-
-    #name = key.encode()
-    #awardsString = awardsString.encode()
-    #tracksString = tracksString.encode()
-    #wikilinkString = wikilinkString.encode()
 
     writer.add_document(name = key, award_list = awardsString, track_list = tracksString, wikilink = wikilinkString )
 
 
-writer.add_document(name = 'aha', award_list = 'b;c;d')
+#writer.add_document(name = 'aha', award_list = 'b;c;d')
 writer.commit()
 
+#___________________________________________________________________________________________________
 '''
         if name == 'Melissa Joan Hart,en':
             print("name: " + name)
