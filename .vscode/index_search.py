@@ -77,8 +77,8 @@ def process_search_hit(search_hit, lang, category):
         for tr in tracks:
             count = count + 1
             print('   ',tr)
-            if count == 100:
-                print('   ... and ' + str(len(tracks)-100) + ' more tracks...')
+            if count == 150:
+                print('   ... and ' + str(len(tracks)-150) + ' more tracks...')
                 break
     
         print('_____________________________________________')
@@ -90,9 +90,9 @@ def process_search_hit(search_hit, lang, category):
 
 
 #searched_term = 'Billboard Music Award for Modern Rock'
-#searched_term = 'linkin park'
+#searched_term = 'green day'
 #searched_term = 'American Music Award al Nuevo Artista Favorito de Country,es'
-#searched_term = 'Linkin Park'
+#searched_term = 'Melissa Joan'
  
 ix = open_dir("indexdir")
 status = 'y'
@@ -121,7 +121,7 @@ with ix.searcher() as searcher:
 
         if search_category == 'award':
             query = QueryParser('award_list', schema = ix.schema).parse(searched_term)
-            results = searcher.search(query)
+            results = searcher.search(query, limit = 20)
 
             artists_won = []
             if len(results) != 0:
@@ -142,7 +142,7 @@ with ix.searcher() as searcher:
 
         if search_category == 'track':
             query = QueryParser('track_list', schema = ix.schema).parse(searched_term)
-            results = searcher.search(query)
+            results = searcher.search(query, limit = 20)
 
             artists_recorded = []
             if len(results) != 0:

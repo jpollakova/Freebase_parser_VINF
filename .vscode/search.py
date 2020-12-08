@@ -136,7 +136,7 @@ if search_category == 'artist':
         print('   ', check_lang_version_of_name(searched_wikilink,search_language))
     
 
-    artprint('\n________________________________________________________\n')
+    print('\n________________________________________________________\n')
 
 if search_category == 'award':
     #search_language = 'en'
