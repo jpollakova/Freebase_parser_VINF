@@ -8,7 +8,6 @@ def check_lang(values, lang):
        
     return count
 
-
 DICT_artist_awards = open("FINAL_artist_awards_dict.pkl", "rb")
 artist_awards = pickle.load(DICT_artist_awards)
 DICT_artist_awards.close()
@@ -21,39 +20,73 @@ DICT_wikipage = open("FINAL_wikipage_dict.pkl", "rb")
 wikipage_links = pickle.load(DICT_wikipage)
 DICT_wikipage.close()
 
-print('\n___________________________artist_tracks___________________________________\n')
+DICT_artist_name = open("dict_artist_name.pkl", "rb")
+all_artist_name = pickle.load(DICT_artist_name)
+DICT_artist_name.close()
+
+print('\n___________________________artist__________________________________\n')
+en_artist, es_artist, sk_artist = 0,0,0
+
+for key, values in all_artist_name.items():
+    
+    if str(values).__contains__(',en'):
+            en_artist = en_artist + 1
+    if str(values).__contains__(',es'):
+            es_artist = es_artist + 1
+    if str(values).__contains__(',sk'):
+            sk_artist = sk_artist + 1
+    #en_artist = en_artist + check_lang(values,",en'") + check_lang(values,',en"')
+    #sk_artist = sk_artist + check_lang(values,",sk'") + check_lang(values,',sk"')
+    #es_artist = es_artist + check_lang(values,",es'") + check_lang(values,',es"')
+
+print('NUMBER OF ALL MUSIC ARTISTS > ', len(all_artist_name))
+print('NUMBER OF ENGLISH ARTIST NAMES > ', en_artist, '->', "{:.2f}".format(en_artist*100 / len(all_artist_name)), '%')
+print('NUMBER OF SPANISH ARTIST NAMES > ', es_artist, '->', "{:.2f}".format(es_artist*100 / len(all_artist_name)), '%')
+print('NUMBER OF SLOVAK ARTIST NAMES > ', sk_artist, '->', "{:.2f}".format(sk_artist*100 / len(all_artist_name)), '%')
+
+print('\n___________________________tracks___________________________________\n')
 
 #average number of tracks
 number_of_artists = len(artist_tracks)
 total_num_of_tracks = 0
 max_tracks = 0
+max_artist = ''
 min_tracks = 100
 empty_tracks = 0
 en, es, sk = 0,0,0
+artists_with_wiki = 0
 
-print('NUMBER OF ARTISTS WITH AT LEAST ONE TRACK > ', number_of_artists)
+
+print('NUMBER OF ARTISTS IN TRACK DICTIONARY > ', number_of_artists)
 
 
 for key, values in artist_tracks.items():
+
     empty_in_line = values.count('[]')
     empty_tracks = empty_tracks + empty_in_line
 
     en = en + check_lang(values,",en'") + check_lang(values,',en"')
     sk = sk + check_lang(values,",sk'") + check_lang(values,',sk"')
-    es = es +check_lang(values,",es'") + check_lang(values,',es"')
+    es = es + check_lang(values,",es'") + check_lang(values,',es"')
     
     number_of_tracks = len(values)
     if number_of_tracks > max_tracks:
         max_tracks = number_of_tracks
+        max_artist = key
     if number_of_tracks < min_tracks:
         min_tracks = number_of_tracks
     total_num_of_tracks = total_num_of_tracks + number_of_tracks
+
+    if key in wikipage_links:
+        artists_with_wiki = artists_with_wiki + 1
+
+
 
 print('NUMBER OF ALL TRACKS > ', total_num_of_tracks)
 average_num_of_tracks = total_num_of_tracks / number_of_artists
 print('AVERAGE NUMBER OF TRACKS PER ARTIST > ', "{:.2f}".format(average_num_of_tracks))
 
-print('MAXIMUM NUMBER OF TRACKS PER ARTIST > ', max_tracks)
+print('MAXIMUM NUMBER OF TRACKS PER ARTIST > ', max_tracks, ' artist: ',max_artist[1:-4])
 
 print('MINIMUM NUMBER OF TRACKS PER ARTIST > ', min_tracks)
 
@@ -77,7 +110,8 @@ max_awards = 0
 min_awards = 100
 en, es, sk = 0,0,0
 
-print('NUMBER OF ARTISTS WITH AT LEAST ONE AWARD > ', number_of_artists)
+
+print('NUMBER OF ARTISTS IN AWARD DICTIONARY > ', number_of_artists)
 
 
 for key, values in artist_awards.items():
@@ -89,15 +123,17 @@ for key, values in artist_awards.items():
     number_of_awards = len(values)
     if number_of_awards > max_awards:
         max_awards = number_of_awards
+        max_artist = key
     if number_of_awards < min_awards:
         min_awards = number_of_awards
     total_num_of_awards = total_num_of_awards + number_of_awards
+
 
 print('NUMBER OF ALL AWARDS > ', total_num_of_awards)
 average_num_of_awards = total_num_of_awards / number_of_artists
 print('AVERAGE NUMBER OF AWARDS PER ARTIST> ', "{:.2f}".format(average_num_of_awards))
 
-print('MAXIMUM NUMBER OF AWARDS PER ARTIST > ', max_awards)
+print('MAXIMUM NUMBER OF AWARDS PER ARTIST > ', max_awards, ' artist: ', max_artist[1:-4])
 
 print('MINIMUM NUMBER OF AWARDS PER ARTIST > ', min_awards)
 
@@ -105,4 +141,19 @@ print('NUMBER OF ENGLISH AWARD NAMES > ', en, '->', "{:.2f}".format(en*100 / tot
 print('NUMBER OF SPANISH AWARD NAMES > ', es, '->', "{:.2f}".format(es*100 / total_num_of_awards), '%')
 print('NUMBER OF SLOVAK AWARD NAMES > ', sk, '->', "{:.2f}".format(sk*100 / total_num_of_awards), '%')
 
-print('\n')
+print('\n___________________________wikipage___________________________________\n')
+
+wiki_csv = open('PARSED_DATA/wikipage_mappings.txt', 'rt', encoding="utf-8")
+
+num_of_all_wikipage_links = 0
+
+for line in wiki_csv:
+    num_of_all_wikipage_links = num_of_all_wikipage_links + 1
+
+print('NUMBER OF ALL WIKIPAGE LINKS > ', num_of_all_wikipage_links)
+print('NUMBER OF ARTIST WITH WIKIPAGE LINK > ', artists_with_wiki)
+
+print('PERCENTAGE OF ARTISTS IN WIKI MAPPINGS DICTIONARY > ', "{:.2f}".format(artists_with_wiki*100 / num_of_all_wikipage_links), '%')
+
+print('\n\n\n')
+
