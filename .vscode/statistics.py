@@ -24,7 +24,7 @@ DICT_artist_name = open("dict_artist_name.pkl", "rb")
 all_artist_name = pickle.load(DICT_artist_name)
 DICT_artist_name.close()
 
-print('\n___________________________artist__________________________________\n')
+print('\n___________________________artists__________________________________\n')
 en_artist, es_artist, sk_artist = 0,0,0
 
 for key, values in all_artist_name.items():
@@ -40,9 +40,9 @@ for key, values in all_artist_name.items():
     #es_artist = es_artist + check_lang(values,",es'") + check_lang(values,',es"')
 
 print('NUMBER OF ALL MUSIC ARTISTS > ', len(all_artist_name))
-print('NUMBER OF ENGLISH ARTIST NAMES > ', en_artist, '->', "{:.2f}".format(en_artist*100 / len(all_artist_name)), '%')
-print('NUMBER OF SPANISH ARTIST NAMES > ', es_artist, '->', "{:.2f}".format(es_artist*100 / len(all_artist_name)), '%')
-print('NUMBER OF SLOVAK ARTIST NAMES > ', sk_artist, '->', "{:.2f}".format(sk_artist*100 / len(all_artist_name)), '%')
+print('NUMBER OF ENGLISH ARTIST NAMES > ', en_artist, '->', "{:.3f}".format(en_artist*100 / len(all_artist_name)), '%')
+print('NUMBER OF SPANISH ARTIST NAMES > ', es_artist, '->', "{:.3f}".format(es_artist*100 / len(all_artist_name)), '%')
+print('NUMBER OF SLOVAK ARTIST NAMES > ', sk_artist, '->', "{:.3f}".format(sk_artist*100 / len(all_artist_name)), '%')
 
 print('\n___________________________tracks___________________________________\n')
 
@@ -84,7 +84,8 @@ for key, values in artist_tracks.items():
 
 print('NUMBER OF ALL TRACKS > ', total_num_of_tracks)
 average_num_of_tracks = total_num_of_tracks / number_of_artists
-print('AVERAGE NUMBER OF TRACKS PER ARTIST > ', "{:.2f}".format(average_num_of_tracks))
+print('AVERAGE NUMBER OF TRACKS PER ARTIST (artists having at least one track) > ', "{:.3f}".format(average_num_of_tracks))
+print('AVERAGE NUMBER OF TRACKS PER ARTIST (all music artists) > ', "{:.3f}".format(total_num_of_tracks / len(all_artist_name)))
 
 print('MAXIMUM NUMBER OF TRACKS PER ARTIST > ', max_tracks, ' artist: ',max_artist[1:-4])
 
@@ -92,13 +93,13 @@ print('MINIMUM NUMBER OF TRACKS PER ARTIST > ', min_tracks)
 
 print('NUMBER OF EMPTY TRACK NAMES > ', empty_tracks)
 
-print('AVERAGE NUM OF EMPTY TRACK NAME PER ARTIST > ', "{:.2f}".format(empty_tracks / number_of_artists))
+print('AVERAGE NUM OF EMPTY TRACK NAME PER ARTIST > ', "{:.3f}".format(empty_tracks / number_of_artists))
 
-print('PERCENTAGE OF EMPTY TRACK NAMES > ', "{:.2f}".format(empty_tracks*100 / total_num_of_tracks), '%')
+print('PERCENTAGE OF EMPTY TRACK NAMES > ', "{:.3f}".format(empty_tracks*100 / total_num_of_tracks), '%')
 
-print('NUMBER OF ENGLISH TRACK NAMES > ', en, '->', "{:.2f}".format(en*100 / total_num_of_tracks), '%')
-print('NUMBER OF SPANISH TRACK NAMES > ', es, '->', "{:.2f}".format(es*100 / total_num_of_tracks), '%')
-print('NUMBER OF SLOVAK TRACK NAMES > ', sk, '->', "{:.2f}".format(sk*100 / total_num_of_tracks), '%')
+print('NUMBER OF ENGLISH TRACK NAMES > ', en, '->', "{:.3f}".format(en*100 / total_num_of_tracks), '%')
+print('NUMBER OF SPANISH TRACK NAMES > ', es, '->', "{:.3f}".format(es*100 / total_num_of_tracks), '%')
+print('NUMBER OF SLOVAK TRACK NAMES > ', sk, '->', "{:.3f}".format(sk*100 / total_num_of_tracks), '%')
 
     
 print('\n___________________________artist_awards___________________________________\n')
@@ -131,15 +132,16 @@ for key, values in artist_awards.items():
 
 print('NUMBER OF ALL AWARDS > ', total_num_of_awards)
 average_num_of_awards = total_num_of_awards / number_of_artists
-print('AVERAGE NUMBER OF AWARDS PER ARTIST> ', "{:.2f}".format(average_num_of_awards))
+print('AVERAGE NUMBER OF AWARDS PER ARTIST (artists having at least one award) > ', "{:.3f}".format(average_num_of_awards))
+print('AVERAGE NUMBER OF AWARDS PER ARTIST (all music artists) > ', "{:.3f}".format(total_num_of_awards / len(all_artist_name)))
 
 print('MAXIMUM NUMBER OF AWARDS PER ARTIST > ', max_awards, ' artist: ', max_artist[1:-4])
 
 print('MINIMUM NUMBER OF AWARDS PER ARTIST > ', min_awards)
 
-print('NUMBER OF ENGLISH AWARD NAMES > ', en, '->', "{:.2f}".format(en*100 / total_num_of_awards), '%')
-print('NUMBER OF SPANISH AWARD NAMES > ', es, '->', "{:.2f}".format(es*100 / total_num_of_awards), '%')
-print('NUMBER OF SLOVAK AWARD NAMES > ', sk, '->', "{:.2f}".format(sk*100 / total_num_of_awards), '%')
+print('NUMBER OF ENGLISH AWARD NAMES > ', en, '->', "{:.3f}".format(en*100 / total_num_of_awards), '%')
+print('NUMBER OF SPANISH AWARD NAMES > ', es, '->', "{:.3f}".format(es*100 / total_num_of_awards), '%')
+print('NUMBER OF SLOVAK AWARD NAMES > ', sk, '->', "{:.3f}".format(sk*100 / total_num_of_awards), '%')
 
 print('\n___________________________wikipage___________________________________\n')
 
@@ -151,9 +153,10 @@ for line in wiki_csv:
     num_of_all_wikipage_links = num_of_all_wikipage_links + 1
 
 print('NUMBER OF ALL WIKIPAGE LINKS > ', num_of_all_wikipage_links)
-print('NUMBER OF ARTIST WITH WIKIPAGE LINK > ', artists_with_wiki)
+#print('NUMBER OF ARTIST WITH WIKIPAGE LINK > ', artists_with_wiki)
+print('NUMBER OF ARTIST WITH WIKIPAGE LINK > ', len(wikipage_links))
 
-print('PERCENTAGE OF ARTISTS IN WIKI MAPPINGS DICTIONARY > ', "{:.2f}".format(artists_with_wiki*100 / num_of_all_wikipage_links), '%')
+print('PERCENTAGE OF ARTISTS IN WIKI MAPPINGS DICTIONARY > ', "{:.3f}".format(len(wikipage_links)*100 / num_of_all_wikipage_links), '%')
 
 print('\n\n\n')
 
